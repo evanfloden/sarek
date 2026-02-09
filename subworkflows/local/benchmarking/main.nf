@@ -101,6 +101,19 @@ process BENCHMARK_HAPPY {
         --engine vcfeval \\
     || true
 
+    # Generate fallback summary if hap.py did not produce one
+    # (e.g. VCF incompatibility).  All metrics are zero so the
+    # optimizer learns to avoid this parameter combination.
+    if [ ! -f ${prefix}.summary.csv ]; then
+        cat <<-END_CSV > ${prefix}.summary.csv
+Type,Filter,TRUTH.TOTAL,TRUTH.TP,TRUTH.FN,QUERY.TOTAL,QUERY.FP,QUERY.UNK,FP.gt,FP.al,METRIC.Recall,METRIC.Precision,METRIC.Frac_NA,METRIC.F1_Score
+INDEL,ALL,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
+INDEL,PASS,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
+SNP,ALL,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
+SNP,PASS,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
+END_CSV
+    fi
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         hap.py: \$(hap.py --version 2>&1 | grep -oP '\\d+\\.\\d+\\.\\d+' || echo '0.3.15')
