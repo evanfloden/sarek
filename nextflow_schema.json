@@ -11,7 +11,10 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
             "help_text": "Specify input samplesheet, step and output folder.",
-            "required": ["step", "outdir"],
+            "required": [
+                "step",
+                "outdir"
+            ],
             "properties": {
                 "input": {
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
@@ -210,7 +213,12 @@
                     "default": "Adjacency",
                     "fa_icon": "fas fa-tape",
                     "description": "Default strategy for fgbio UMI-based consensus read generation ",
-                    "enum": ["Identity", "Edit", "Adjacency", "Paired"]
+                    "enum": [
+                        "Identity",
+                        "Edit",
+                        "Adjacency",
+                        "Paired"
+                    ]
                 },
                 "umi_in_read_header": {
                     "type": "boolean",
@@ -223,7 +231,14 @@
                     "fa_icon": "fas fa-tape",
                     "description": "Location of the UMI(s) to be extracted with fastp.",
                     "help_text": "Use if UMIs are not present in the read header, but in a specific location within the reads/fastq header index. This will be used to extract UMIs from reads or index in the fastq header and store them in the RX tag.",
-                    "enum": ["read1", "read2", "per_read", "index1", "index2", "per_index"]
+                    "enum": [
+                        "read1",
+                        "read2",
+                        "per_read",
+                        "index1",
+                        "index2",
+                        "per_index"
+                    ]
                 },
                 "umi_length": {
                     "type": "integer",
@@ -280,7 +295,13 @@
                     "type": "string",
                     "default": "bwa-mem",
                     "fa_icon": "fas fa-puzzle-piece",
-                    "enum": ["bwa-mem", "bwa-mem2", "dragmap", "sentieon-bwamem", "parabricks"],
+                    "enum": [
+                        "bwa-mem",
+                        "bwa-mem2",
+                        "dragmap",
+                        "sentieon-bwamem",
+                        "parabricks"
+                    ],
                     "description": "Specify aligner to be used to map reads to reference genome.",
                     "help_text": "Sarek will build missing indices automatically if not provided. Set `--bwa false` if indices should be (re-)built.\nIf DragMap is selected as aligner, it is recommended to skip baserecalibration with `--skip_tools baserecalibrator`. For more info see [here](https://gatk.broadinstitute.org/hc/en-us/articles/4407897446939--How-to-Run-germline-single-sample-short-variant-discovery-in-DRAGEN-mode)."
                 },
@@ -695,7 +716,11 @@
                     "type": "string",
                     "default": "vcf",
                     "description": "VEP output-file format.",
-                    "enum": ["json", "tab", "vcf"],
+                    "enum": [
+                        "json",
+                        "tab",
+                        "vcf"
+                    ],
                     "help_text": "Sets the format of the output-file from VEP. Available formats: json, tab and vcf.",
                     "fa_icon": "fas fa-table"
                 },
@@ -784,7 +809,10 @@
                     "type": "string",
                     "description": "ASCAT genome.",
                     "help_text": "Must be set to run ASCAT, either hg19 or hg38.\n\nIf you use AWS iGenomes, this has already been set for you appropriately.",
-                    "enum": ["hg19", "hg38"]
+                    "enum": [
+                        "hg19",
+                        "hg38"
+                    ]
                 },
                 "ascat_alleles": {
                     "type": "string",
@@ -1160,7 +1188,14 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "enum": [
+                        "symlink",
+                        "rellink",
+                        "link",
+                        "copy",
+                        "copyNoFollow",
+                        "move"
+                    ],
                     "hidden": true
                 },
                 "email": {
@@ -1249,7 +1284,10 @@
                     "hidden": true
                 },
                 "help": {
-                    "type": ["boolean", "string"],
+                    "type": [
+                        "boolean",
+                        "string"
+                    ],
                     "description": "Display the help message."
                 },
                 "help_full": {
@@ -1259,6 +1297,42 @@
                 "show_hidden": {
                     "type": "boolean",
                     "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
+                }
+            }
+        },
+        "benchmarking": {
+            "title": "Benchmarking",
+            "type": "object",
+            "description": "Compare variant calls against a truth set using hap.py",
+            "fa_icon": "fas fa-chart-bar",
+            "properties": {
+                "benchmark_vcf": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-check-double",
+                    "description": "Enable benchmarking against a truth VCF",
+                    "help_text": "When enabled, variant calls are compared against a truth set (e.g., GIAB HG002) using hap.py. Requires --truth_vcf to be set. Produces a JSON metrics file with SNP/INDEL F1 scores suitable for optimization with the stimulus framework."
+                },
+                "truth_vcf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to truth VCF file for benchmarking",
+                    "help_text": "Path to a truth set VCF file, e.g., from the Genome in a Bottle (GIAB) consortium. Required when --benchmark_vcf is true."
+                },
+                "truth_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "fa_icon": "fas fa-file-alt",
+                    "description": "Path to high-confidence regions BED file",
+                    "help_text": "Path to the high-confidence regions BED file corresponding to the truth VCF. Restricts benchmarking to these regions for accurate metrics."
+                },
+                "benchmark_sample": {
+                    "type": "string",
+                    "fa_icon": "fas fa-user",
+                    "description": "Sample ID to benchmark",
+                    "help_text": "If specified, only this sample will be benchmarked. If not set, all germline samples are benchmarked."
                 }
             }
         }
@@ -1284,6 +1358,9 @@
         },
         {
             "$ref": "#/$defs/post_variant_calling"
+        },
+        {
+            "$ref": "#/$defs/benchmarking"
         },
         {
             "$ref": "#/$defs/annotation"

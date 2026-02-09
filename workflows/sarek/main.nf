@@ -45,6 +45,9 @@ include { BAM_VARIANT_CALLING_SOMATIC_ALL                   } from '../../subwor
 // POST VARIANTCALLING: e.g. merging
 include { POST_VARIANTCALLING                               } from '../../subworkflows/local/post_variantcalling'
 
+// Benchmarking against truth set
+include { BENCHMARKING                                      } from '../../subworkflows/local/benchmarking'
+
 // QC on VCF files
 include { VCF_QC_BCFTOOLS_VCFTOOLS                          } from '../../subworkflows/local/vcf_qc_bcftools_vcftools'
 
@@ -537,6 +540,26 @@ workflow SAREK {
         // Gather vcf files for annotation and QC
         // POST_VARIANTCALLING always outputs VCFs - either processed or pass-through originals
         vcf_to_annotate = POST_VARIANTCALLING.out.vcfs
+
+        // BENCHMARKING: compare VCFs against truth set if enabled
+        if (params.benchmark_vcf) {
+            // Filter to benchmark sample if specified, otherwise benchmark all
+            vcf_for_benchmark = params.benchmark_sample
+                ? vcf_to_annotate.filter { meta, vcf -> meta.id == params.benchmark_sample }
+                : vcf_to_annotate
+
+            BENCHMARKING(
+                vcf_for_benchmark,
+                params.truth_vcf ? file(params.truth_vcf, checkIfExists: true) : [],
+                params.truth_bed ? file(params.truth_bed, checkIfExists: true) : [],
+                fasta,
+                fasta_fai,
+                tools,
+                aligner,
+            )
+
+            versions = versions.mix(BENCHMARKING.out.versions)
+        }
 
         CHANNEL_VARIANT_CALLING_CREATE_CSV(vcf_to_annotate, params.outdir)
 

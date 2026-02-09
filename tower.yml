@@ -51,6 +51,14 @@ reports:
     display: "Control-FREEC: parsable file with information about FREEC run"
   "**/reports/bcftools/*.bcftools_stats.txt":
     display: "All samples raw statistics"
+  "**/benchmarking/*/metrics.json":
+    display: "Benchmarking: Per-sample hap.py metrics JSON"
+  "**/benchmarking/*/*.summary.csv":
+    display: "Benchmarking: hap.py summary CSV"
+  "**/benchmarking/*/*.norm.vcf.gz":
+    display: "Benchmarking: Normalized and filtered query VCF"
+  "metrics.json":
+    display: "Benchmarking: Top-level metrics JSON for stimulus"
   "**/reports/snpeff/*/*/*_snpEff.html":
     display: "Statistics and plots for the SnpEff run"
   "**/reports/snpeff/*/*/*_snpEff.genes.txt":
