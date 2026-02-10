@@ -145,7 +145,7 @@ process EXTRACT_METRICS {
     conda "conda-forge::python=3.12"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/python:3.12' :
-        'quay.io/biocontainers/python:3.12' }"
+        'community.wave.seqera.io/library/python:3.12.3--b1e28a92b4cd5859' }"
 
     input:
     tuple val(meta), path(summary_csv)
@@ -161,7 +161,7 @@ process EXTRACT_METRICS {
 
     script:
     """
-    extract_metrics.py \\
+    python3 extract_metrics.py \\
         --summary-csv ${summary_csv} \\
         --sample ${meta.id} \\
         --variant-caller ${variant_caller} \\
@@ -170,7 +170,7 @@ process EXTRACT_METRICS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //')
+        python: \$(python3 --version 2>&1 | sed 's/Python //')
         extract_metrics: 1.0.0
     END_VERSIONS
     """
@@ -190,7 +190,7 @@ process EXTRACT_METRICS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //')
+        python: \$(python3 --version 2>&1 | sed 's/Python //')
         extract_metrics: 1.0.0
     END_VERSIONS
     """
