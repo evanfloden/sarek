@@ -37,6 +37,7 @@ process PREPROCESS_QUERY_VCF {
         ${vcf} \\
     | bcftools view \\
         -f PASS,. \\
+        -e 'ALT="<*>"' \\
         -Oz \\
         -o ${prefix}.norm.vcf.gz
 
