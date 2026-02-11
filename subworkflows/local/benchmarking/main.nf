@@ -105,13 +105,13 @@ process BENCHMARK_HAPPY {
     # (e.g. VCF incompatibility).  All metrics are zero so the
     # optimizer learns to avoid this parameter combination.
     if [ ! -f ${prefix}.summary.csv ]; then
-        cat <<-END_CSV > ${prefix}.summary.csv
-Type,Filter,TRUTH.TOTAL,TRUTH.TP,TRUTH.FN,QUERY.TOTAL,QUERY.FP,QUERY.UNK,FP.gt,FP.al,METRIC.Recall,METRIC.Precision,METRIC.Frac_NA,METRIC.F1_Score
-INDEL,ALL,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
-INDEL,PASS,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
-SNP,ALL,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
-SNP,PASS,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000
-END_CSV
+        {
+            echo "Type,Filter,TRUTH.TOTAL,TRUTH.TP,TRUTH.FN,QUERY.TOTAL,QUERY.FP,QUERY.UNK,FP.gt,FP.al,METRIC.Recall,METRIC.Precision,METRIC.Frac_NA,METRIC.F1_Score"
+            echo "INDEL,ALL,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000"
+            echo "INDEL,PASS,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000"
+            echo "SNP,ALL,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000"
+            echo "SNP,PASS,0,0,0,0,0,0,0,0,0.000000,0.000000,0.000000,0.000000"
+        } > ${prefix}.summary.csv
     fi
 
     cat <<-END_VERSIONS > versions.yml
