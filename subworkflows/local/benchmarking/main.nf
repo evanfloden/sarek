@@ -145,7 +145,7 @@ process EXTRACT_METRICS {
     conda "conda-forge::python=3.12"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/python:3.12' :
-        'community.wave.seqera.io/library/python:3.12.3--b1e28a92b4cd5859' }"
+        'biocontainers/python:3.12' }"
 
     input:
     tuple val(meta), path(summary_csv)
