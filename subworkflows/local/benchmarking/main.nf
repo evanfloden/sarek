@@ -161,7 +161,7 @@ process EXTRACT_METRICS {
 
     script:
     """
-    python3 extract_metrics.py \\
+    extract_metrics.py \\
         --summary-csv ${summary_csv} \\
         --sample ${meta.id} \\
         --variant-caller ${variant_caller} \\
