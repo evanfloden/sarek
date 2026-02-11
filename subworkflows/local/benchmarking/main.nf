@@ -69,7 +69,7 @@ process BENCHMARK_HAPPY {
     conda "bioconda::hap.py=0.3.15"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/hap.py:0.3.15--py27h5c5a3ab_0' :
-        'quay.io/biocontainers/hap.py:0.3.15--py27h5c5a3ab_0' }"
+        'jmcdani20/hap.py:v0.3.12' }"
 
     input:
     tuple val(meta), path(query_vcf), path(query_tbi)
@@ -90,6 +90,7 @@ process BENCHMARK_HAPPY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def bed_arg = truth_bed ? "-f ${truth_bed}" : ""
     """
+    export PATH=/opt/hap.py/bin:\$PATH
     export HGREF=${fasta}
 
     hap.py \\
